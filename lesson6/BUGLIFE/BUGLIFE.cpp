@@ -9,8 +9,8 @@
 #include <vector>
 using namespace std;
 
-vector<int> adj[2000];
-vector<int> color(2000, -1);
+vector<int> adj[2001];
+vector<int> color(2001, -1);
 int N, M;
 
 void dfs(int col, int u)
@@ -28,6 +28,7 @@ void dfs(int col, int u)
 
 int main()
 {
+    ios_base::sync_with_stdio(0);
     int T;
     cin >> T;
     for (int t = 1; t <= T; t++)
@@ -46,20 +47,20 @@ int main()
         for (int i = 1; i <= N; i++)
             color[i] = -1;
         for (int i = 1; i <= N; i++)
-            if (color[i] != -1)
+            if (color[i] == -1)
                 dfs(0, i);
         int ok = 1;
         for (int i = 1; i <= N && ok == 1; i++)
             for (int j = 0; j < adj[i].size(); j++)
-                if (color[i] == color[j])
+                if (color[i] == color[adj[i][j]])
                 {
-                    int ok = 0;
+                    ok = 0;
                     break;
                 }
         if (ok == 1)
-            cout << "Suspicious bugs found!" << endl;
-        else
             cout << "No suspicious bugs found!" << endl;
+        else
+            cout << "Suspicious bugs found!" << endl;
     }
 
     return 0;
