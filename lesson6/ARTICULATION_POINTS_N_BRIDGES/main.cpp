@@ -2,8 +2,8 @@
 using namespace std;
 
 int n, m;
-vector<int> adj[100001], low(100001), num(100001, -1), bridge[100001];
-int curNum = 0, bridgeCnt, artCnt;
+vector<int> adj[100001], low(100001), num(100001, -1), children(100001, 0);
+int curNum = 0, bridgeCnt = 0, artCnt = 0;
 bool isArticulation[100001];
 
 void addEdge(int u, int v)
@@ -23,6 +23,7 @@ void findBridges(int u, int p)
         {
             if (num[v] == -1)
             {
+                children[u]++;
                 findBridges(v, u);
                 low[u] = min(low[u], low[v]);
             }
@@ -30,13 +31,19 @@ void findBridges(int u, int p)
             {
                 low[u] = min(low[u], num[v]);
             }
+            if (p == -1 && children[u] >= 2)
+            {
+                artCnt += ((isArticulation[u]) ? 0 : 1);
+                isArticulation[u] = true;
+            }
+            if (p != -1 && low[v] >= num[u])
+            {
+                artCnt += ((isArticulation[u]) ? 0 : 1);
+                isArticulation[u] = true;
+            }
             if (low[v] > num[u])
             {
-                cout << u << " - " << v << endl;
                 bridgeCnt++;
-                artCnt += ((isArticulation[u]) ? 0 : 1) +
-                          ((isArticulation[v]) ? 0 : 1);
-                isArticulation[u] = isArticulation[v] = true;
             }
         }
     }
